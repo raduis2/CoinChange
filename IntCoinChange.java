@@ -1,10 +1,21 @@
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class IntCoinChange {
 
     private static int numCoins(Integer[] l) {
         return l==null ? Integer.MAX_VALUE - 1 : // -1 to make sure 1+numCoins does not overflow
                 Arrays.asList(l).stream().mapToInt(x->x).sum();
+    }
+
+    /* Label each element in a list of Integers with the corresponding tag from the second list */
+    /* Similar to "zipping" two streams */
+    static List<String> label (List<Integer> count, List<Integer> values) {
+      return IntStream.range(0, count.size())
+               .mapToObj(i-> count.get(i).intValue()==0 ? "     " :
+                  String.format("%2dx%2d", count.get(i), values.get(i)))
+               .collect(Collectors.toList());
     }
 
     private static Integer[] computeSolution(List<Integer> coinValues, int S, Map<Integer, Integer[]> cache) {
@@ -21,6 +32,7 @@ public class IntCoinChange {
 
         // Dynamic Programming technique:
         // solution(S) = 1 + min {i=0..n-1 | solution(S - v_i)}
+        solution = null;
         int min = Integer.MAX_VALUE - 1;
         for (int i=0; i<n; i++) {
             int v = coinValues.get(i);
@@ -44,6 +56,7 @@ public class IntCoinChange {
 
         Map<Integer, Integer[]> cache = new HashMap<Integer, Integer[]>();
         Integer[] solution = computeSolution(coinValues, sum.intValue(), cache);
-        System.out.println("Solution: " + Arrays.asList(solution));
+        System.out.println(String.format("Solution: %s = %d coins.",
+            label(Arrays.asList(solution), coinValues), numCoins(solution)));
     }
 }

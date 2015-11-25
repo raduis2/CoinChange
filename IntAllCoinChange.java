@@ -4,6 +4,8 @@ import java.util.stream.Collectors;
 
 public class IntAllCoinChange {
 
+  /* Label each element in a list of Integers with the corresponding tag from the second list */
+  /* Similar to "zipping" two streams */
   static List<String> label (List<Integer> count, List<Integer> values) {
     return IntStream.range(0, count.size())
              .mapToObj(i-> count.get(i).intValue()==0 ? "     " :
@@ -12,12 +14,12 @@ public class IntAllCoinChange {
   }
 
   private static Collection<List<Integer>> getSolutions(List<Integer> coinValues, int S) {
-    Collection<List<Integer>> solutions = new LinkedHashSet<List<Integer>>();
+    Collection<List<Integer>> solutions = new LinkedHashSet<>();
     int numCoinValues = coinValues.size();
     if (numCoinValues <= 0) return solutions;
     int headValue = coinValues.get(0).intValue();
     int headCount = S/headValue;  // coin values should be strictly positive
-    if (numCoinValues==1) {
+    if (numCoinValues == 1) {
       if (S == headValue*headCount) {
          solutions.add(Arrays.asList(headCount));
       }
